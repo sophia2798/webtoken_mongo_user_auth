@@ -1,26 +1,12 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const db = require("./models");
 const dbConfig = require("./config/db.config");
 const Account = db.account;
-
-db.mongoose.connect(`mongodbL//${dbConfig.HOST}/${dbConfig.DB}`, {
-    useNewUrlPaser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-})
-.then(() => {
-    console.log("Successfully connected to MongoDB!");
-    initial();
-})
-.catch(err => {
-    console.error("Connection Error", err);
-    process.exit();
-});
 
 initial = () => {
     Account.estimatedDocumentCount((err, count) => {
@@ -53,8 +39,23 @@ const corsOption = {
 };
 
 app.use(cors(corsOption));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+    useNewUrlPaser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+})
+.then(() => {
+    console.log("Successfully connected to MongoDB!");
+    initial();
+})
+.catch(err => {
+    console.error("Connection Error", err);
+    process.exit();
+});
 
 app.get("/", (req,res) => {
     res.json({ message: "Welcome to the MongoDB & WebToken User Auth Test"});

@@ -18,37 +18,37 @@ verifyToken = (req, res, next) => {
         req.userId = decoded.id;
         next();
     });
+};
 
-    isChild1 = (req, res, next) => {
-        User.findById(req.userId).exec((err, user) => {
-            if (err) {
-                res.status(500).send({ message: err });
-                return;
-            }
+isChild1 = (req, res, next) => {
+    User.findById(req.userId).exec((err, user) => {
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+        }
 
-            Account.find(
-                {
-                    _id: { $in: user.accounts }
-                },
-                (err, accounts) => {
-                    if (err) {
-                        res.status(500).send({ message: err });
-                        return;
-                    }
-
-                    for (var i=0; i < accounts.length; i++) {
-                        if (accounts[i].name === "Child 1") {
-                            next();
-                            return;
-                        }
-                    }
-
-                    res.status(403).send({ message: "Require Child 1 Account!" });
+        Account.find(
+            {
+                _id: { $in: user.accounts }
+            },
+            (err, accounts) => {
+                if (err) {
+                    res.status(500).send({ message: err });
                     return;
                 }
-            );
-        });
-    };
+
+                for (var i=0; i < accounts.length; i++) {
+                    if (accounts[i].name === "Child 1") {
+                        next();
+                        return;
+                    }
+                }
+
+                res.status(403).send({ message: "Require Child 1 Account!" });
+                return;
+            }
+        );
+    });
 };
 
 const authJwt = {
