@@ -60,6 +60,10 @@ app.get("/", (req,res) => {
     res.json({ message: "Welcome to the MongoDB & WebToken User Auth Test"});
 });
 
+// ROUTES 
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
+
 app.listen(PORT, () => {
     console.log(`App is running on PORT ${PORT}`);
 });
