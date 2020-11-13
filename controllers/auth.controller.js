@@ -64,7 +64,7 @@ exports.signin = (req, res) => {
     User.findOne({
         email: req.body.email
     })
-    .populate("accounts", "-__v")
+    .populate("accounts")
     .exec((err, user) => {
         if (err) {
             res.status(500).send({ message: err });
@@ -94,7 +94,7 @@ exports.signin = (req, res) => {
         var authorities = [];
 
         for (var j=0; j<user.accounts.length; j++) {
-            authorities.push("ACCOUNT_" + user.accounts[i].username.toUpperCase());
+            authorities.push("ACCOUNT_" + user.accounts[j].username.toUpperCase());
         }
         res.status(200).send({
             id: user._id,

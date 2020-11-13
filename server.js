@@ -34,16 +34,16 @@ initial = () => {
     });
 };
 
-const corsOption = {
-    origin: "https//localhost:3001"
-};
+// const corsOption = {
+//     origin: "https//localhost:3001"
+// };
 
-app.use(cors(corsOption));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-    useNewUrlPaser: true,
+    useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
